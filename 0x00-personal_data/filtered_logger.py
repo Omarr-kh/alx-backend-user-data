@@ -64,14 +64,32 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     host = os.getenv("PERSONAL_DATA_DB_HOST", default="localhost")
     db_name = os.getenv("PERSONAL_DATA_DB_NAME")
 
-    try:
-        connection = mysql.connector.connect(
-            host=host,
-            user=user,
-            database=db_name,
-            password=password
-        )
-    except BaseException:
-        return None
+    connection = mysql.connector.connect(
+        host=host,
+        user=user,
+        database=db_name,
+        password=password
+    )
 
     return connection
+
+
+def main() -> None:
+    """ application entry """
+    connection = get_db()
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM users;")
+
+    logger = get_logger()
+
+    for row in cursor:
+        logged_data = ""
+        for i in range(len(row)):
+            logged_data += f'{cursor.column_names[i]}={row[i]};'
+        logger.info(logged_data)
+    cursor.close()
+    connection.close()
+
+
+if __name__ == "__main__":
+    main()
