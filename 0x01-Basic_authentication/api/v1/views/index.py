@@ -42,4 +42,3 @@ def forbidden_route() -> None:
         403 error
     """
     abort(403)
-
