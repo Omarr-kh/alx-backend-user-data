@@ -32,7 +32,7 @@ class BasicAuth(Auth):
         try:
             decoded_header = base64_authorization_header.encode('utf-8')
             return base64.decodebytes(decoded_header).decode('utf-8')
-        except binascii.Error:
+        except (binascii.Error, UnicodeDecodeError):
             return None
 
     def extract_user_credentials(
@@ -45,7 +45,7 @@ class BasicAuth(Auth):
             return (None, None)
         separator_colon_idx = decoded_base64_authorization_header.find(":")
         email = decoded_base64_authorization_header[:separator_colon_idx]
-        passwrod = decoded_base64_authorization_header[separator_colon_idx+1:]
+        password = decoded_base64_authorization_header[separator_colon_idx+1:]
         return (email, password)
 
     def user_object_from_credentials(
