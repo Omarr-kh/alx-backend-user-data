@@ -34,9 +34,12 @@ def before_request():
     if auth:
         check_list = ['/api/v1/status/',
                       '/api/v1/unauthorized/',
-                      '/api/v1/forbidden/']
+                      '/api/v1/forbidden/',
+                      '/api/v1/auth_session/login/']
         if auth.require_auth(request.path, check_list):
             auth_header = auth.authorization_header(request)
+            if not auth_header and not auth.session_cookie(request):
+                abort(401)
             if not auth_header:
                 abort(401)
             curr_user = auth.current_user(request)
