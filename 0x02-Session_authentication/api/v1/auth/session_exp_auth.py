@@ -37,7 +37,7 @@ class SessionExpAuth(SessionAuth):
                 return None
             time_now = datetime.now()
             time_span = timedelta(seconds=self.session_duration)
-            expiry_time = session_dict.get('created_at') + time_span
+            expiry_time = session_data.get('created_at') + time_span
             if expiry_time < time_now:
                 return None
             return session_data.get("user_id")
