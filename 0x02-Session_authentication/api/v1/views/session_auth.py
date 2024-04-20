@@ -36,3 +36,13 @@ def login() -> Tuple[str, int]:
         return result
     else:
         return jsonify({"error": "wrong password"}), 401
+
+@app_views.route(
+    '/auth_session/logout', methods=['DELETE'], strict_slashes=False)
+def logout() -> Tuple[str, int]:
+    """ logs out be deleting session id """
+    from api.v1.app import auth
+    if not auth.destroy_session(request):
+        abort(404)
+    else:
+        return jsonify({}), 200
