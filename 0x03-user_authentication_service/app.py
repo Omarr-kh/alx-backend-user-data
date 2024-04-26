@@ -92,11 +92,11 @@ def update_password() -> str:
     reset_token = request.form.get("reset_token")
     new_password = request.form.get("new_password")
 
-    if not email or not reset_token or not password:
+    if not email or not reset_token or not new_password:
         abort(403)
     try:
         AUTH.valid_reset_token(email, reset_token)
-        AUTH.update_password(reset_token, password)
+        AUTH.update_password(reset_token, new_password)
     except ValueError:
         abort(403)
 
